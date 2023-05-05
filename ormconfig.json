@@ -1,0 +1,11 @@
+{
+	"cli": {
+		"migrationsDir": "src/db/migrations",
+		"entitiesDir": "src/models/**/entity.ts"
+	},
+	"logging": false,
+	"migrations": ["src/db/migrations/*.ts"],
+	"entities": ["src/models/**/entity.ts"],
+	"type": "mysql",
+	"url": "mysql://root:password@app-db:3306/db"
+}
