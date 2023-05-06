@@ -11,7 +11,6 @@ import { NOT_FOUND } from 'http-status-codes';
 
 import SetupV1Router from '@routes/v1';
 import { Config } from '@config';
-import { APP_NAME } from '@shared/constants';
 import { ErrorHandler } from '@shared/functions';
 
 // Init express
