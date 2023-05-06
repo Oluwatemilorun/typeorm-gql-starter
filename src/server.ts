@@ -18,11 +18,11 @@ const app = express();
 
 // Set basic express settings
 app.use(
-	cors({
-		origin: true, // ['http://localhost'],
-		optionsSuccessStatus: 200,
-		credentials: true,
-	})
+  cors({
+    origin: true, // ['http://localhost'],
+    optionsSuccessStatus: 200,
+    credentials: true,
+  }),
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,12 +31,12 @@ app.use(health.ping('/health'));
 
 // Show routes called in console during development
 if (process.env.NODE_ENV === 'development') {
-	app.use(morgan('dev'));
+  app.use(morgan('dev'));
 }
 
 // Security
 if (process.env.NODE_ENV === 'production') {
-	app.use(helmet());
+  app.use(helmet());
 }
 
 // Add APIs
@@ -44,7 +44,7 @@ SetupV1Router(app);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-	next(createError(NOT_FOUND));
+  next(createError(NOT_FOUND));
 });
 
 // handle errors
