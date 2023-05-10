@@ -16,14 +16,14 @@
 		"lib": ["es2018", "esnext.asynciterable"],
 		"moduleResolution": "node",
 		"paths": {
+			"@/*": [
+				"src/*"
+			],
 			"@controllers/*": [
 				"src/controllers/*"
 			],
 			"@middlewares/*": [
 				"src/middlewares/*"
-			],
-			"@models/*": [
-				"src/models/*"
 			],
 			"@shared/*": [
 				"src/shared/*"
@@ -33,6 +33,12 @@
 			],
 			"@daos/*": [
 				"src/daos/*"
+			],
+			"@models": [
+				"src/models"
+			],
+			"@graphql": [
+				"src/graphql"
 			],
 			"@db": [
 				"src/db"

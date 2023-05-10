@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Config } from '@config';
-import { User } from '@models';
+import { User, UserLocation } from '@models';
 
 class DB {
   public get dataSource(): DataSource {
@@ -8,7 +8,7 @@ class DB {
       type: 'postgres',
       url: Config.DB_URL,
       migrationsRun: true,
-      entities: [User],
+      entities: [User, UserLocation],
       migrations: ['./migrations/*.ts'],
     });
   }

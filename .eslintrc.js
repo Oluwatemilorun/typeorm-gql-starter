@@ -16,6 +16,7 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'warn',
+    '@typescript-eslint/no-inferrable-types': 'off',
   },
   ignorePatterns: [
     'migrations/*', // Ignore generated migrations.

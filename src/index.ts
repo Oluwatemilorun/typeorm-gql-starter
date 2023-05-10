@@ -5,7 +5,7 @@ import { Config } from '@config';
 import { Constants } from '@shared/constants';
 import { DB } from '@db';
 import logger from '@shared/logger';
-import app from '@server';
+import CreateServer from '@server';
 
 process.on('unhandledRejection', function (reason, p) {
   logger.warn('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason);
@@ -13,14 +13,15 @@ process.on('unhandledRejection', function (reason, p) {
 
 // Connect to DB
 DB.init()
-  .then((source) => {
+  .then(async (source) => {
     // Start the server
+    const app = await CreateServer();
     const port = Number(Config.PORT);
 
     const server = app.listen(port, () => {
       logger.info(`
 	------------
-	${Constants.APP_NAME} Server Started!
+	🚀 ${Constants.APP_NAME} Server Started!
 
 	URL: http://localhost:${port}
 	Health: http://localhost:${port}/health
@@ -52,5 +53,6 @@ DB.init()
     process.on('SIGINT', gracefulShutDown);
   })
   .catch((err) => {
+    console.log(err);
     logger.error(err);
   });
