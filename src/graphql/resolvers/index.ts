@@ -1,1 +1,3 @@
-export default [] as const;
+import { CategoryResolver } from './category';
+
+export default [CategoryResolver] as const;
