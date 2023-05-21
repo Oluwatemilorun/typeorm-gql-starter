@@ -3,56 +3,57 @@ import '@shared/types/modules';
 
 import { Config } from '@config';
 import { Constants } from '@shared/constants';
-import { DB } from '@db';
+import { GracefulShutdownServer } from '@shared/functions';
 import logger from '@shared/logger';
+import loaders from '@loaders';
 import CreateServer from '@server';
 
 process.on('unhandledRejection', function (reason, p) {
   logger.warn('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason);
 });
 
-// Connect to DB
-DB.init()
-  .then(async (source) => {
-    // Start the server
+(async (): Promise<void> => {
+  async function start(): Promise<void> {
     const app = await CreateServer();
-    const port = Number(Config.PORT);
 
-    const server = app.listen(port, () => {
-      logger.info(`
-	------------
-	🚀 ${Constants.APP_NAME} Server Started!
+    try {
+      const { db } = await loaders({ app });
+      const port = Number(Config.PORT);
 
-	URL: http://localhost:${port}
-	Health: http://localhost:${port}/health
-	API Doc: http://localhost:${port}/api-docs
-	------------
-			`);
-    });
+      const server = GracefulShutdownServer.create(
+        app.listen(port, () => {
+          logger.info(`
+  ------------
+  🚀 ${Constants.APP_NAME} Server Started!
 
-    // Handle graceful shutdown
-    const gracefulShutDown = (): void => {
-      server.close((err) => {
-        if (err) {
-          logger.error('Error received when shutting down the server.', err);
-          process.exit(1);
-        }
+  URL: http://localhost:${port}
+  Health: http://localhost:${port}/health
+  API Doc: http://localhost:${port}/api-docs
+  ------------
+              `);
+        }),
+      );
 
-        // Close the connection with the database
-        source
-          .destroy()
-          .then(() => logger.info('Gracefully stopping the DB'))
-          .catch((e) => logger.error('Error received when shutting down the DB', e));
+      // Handle graceful shutdown of database and server
+      const gracefulShutDown = (): void => {
+        Promise.all([db.destroy(), server.shutdown()])
+          .then(() => {
+            logger.info('Gracefully stopping the server.');
+            process.exit(0);
+          })
+          .catch((e) => {
+            logger.error('Error received when shutting down the server.', e);
+            process.exit(1);
+          });
+      };
 
-        logger.info('Gracefully stopping the server.');
-        process.exit(0);
-      });
-    };
+      process.on('SIGTERM', gracefulShutDown);
+      process.on('SIGINT', gracefulShutDown);
+    } catch (err) {
+      logger.error('Error starting server', err);
+      process.exit(1);
+    }
+  }
 
-    process.on('SIGTERM', gracefulShutDown);
-    process.on('SIGINT', gracefulShutDown);
-  })
-  .catch((err) => {
-    console.log(err);
-    logger.error(err);
-  });
+  await start();
+})();

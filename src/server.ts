@@ -14,7 +14,7 @@ import SetupV1Router from '@routes/v1';
 import { Config } from '@config';
 import { ErrorHandler } from '@shared/functions';
 import { Constants } from '@shared/constants';
-import { SetupGraphqlServer } from '@graphql';
+import { SetupGraphqlServer } from '@graphql/server';
 
 const CreateServer = async (): Promise<Express> => {
   // Init express

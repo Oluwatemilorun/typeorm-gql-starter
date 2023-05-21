@@ -34,14 +34,17 @@
 			"@daos/*": [
 				"src/daos/*"
 			],
+			"@graphql/*": [
+				"src/graphql/*"
+			],
+			"@loaders/*": [
+				"src/loaders/*"
+			],
+			"@loaders": [
+				"src/loaders",
+			],
 			"@models": [
 				"src/models"
-			],
-			"@graphql": [
-				"src/graphql"
-			],
-			"@db": [
-				"src/db"
 			],
 			"@config": [
 				"src/config"
