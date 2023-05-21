@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql';
+import { GraphQLError, GraphQLErrorOptions } from 'graphql/index';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { RateLimiterRes } from 'rate-limiter-flexible';
 import { ArgumentValidationError } from 'type-graphql';
@@ -7,15 +7,18 @@ import { Constants } from '../constants';
 
 export class MaxQueryComplexityReached extends GraphQLError {
   constructor(msg: string, limiterRes?: RateLimiterRes) {
-    super(msg, null, null, null, null, null, {
-      code: Constants.ERROR_CODES.MAX_QUERY_COMPLEXITY_EXCEEDED,
-      http: {
-        status: 429,
-        headers: limiterRes
-          ? new Map([['Retry-After', String(limiterRes.msBeforeNext / 1000)]])
-          : null,
+    const opts: GraphQLErrorOptions = {
+      extensions: {
+        code: Constants.ERROR_CODES.MAX_QUERY_COMPLEXITY_EXCEEDED,
+        http: {
+          status: 429,
+          headers: limiterRes
+            ? new Map([['Retry-After', String(limiterRes.msBeforeNext / 1000)]])
+            : null,
+        },
       },
-    });
+    };
+    super(msg, opts);
   }
 }
 
@@ -65,9 +68,12 @@ export class BadRequestError extends GraphQLError {
     ```
   */
   constructor(err: ArgumentValidationError) {
-    super(err.message, null, null, null, null, null, {
-      code: ApolloServerErrorCode.BAD_USER_INPUT,
-      errors: err.validationErrors,
-    });
+    const opts: GraphQLErrorOptions = {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_USER_INPUT,
+        errors: err.validationErrors,
+      },
+    };
+    super(err.message, opts);
   }
 }
