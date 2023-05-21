@@ -1,4 +1,5 @@
 import type { AwilixContainer } from 'awilix';
+import { EntitySchema } from 'typeorm';
 
 export interface ApolloContext {
   remoteAddress: string;
@@ -31,3 +32,5 @@ export type Loader<T> = (opt: { container: AppContainer }) => T | Promise<T>;
 export type ClassConstructor<T> = {
   new (...args: unknown[]): T;
 };
+
+export type Model = ClassConstructor<unknown> | EntitySchema;

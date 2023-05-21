@@ -2,11 +2,12 @@ import glob from 'glob';
 import path from 'path';
 import { asClass, asValue } from 'awilix';
 import { EntitySchema } from 'typeorm';
-import { ClassConstructor, ContainerStore, Loader } from '@/shared/types';
-import { formatRegistrationName } from '@/shared/functions';
+import { ClassConstructor, ContainerStore, Loader, Model } from '@shared/types';
+import { formatRegistrationName } from '@shared/functions';
 
-type Model = ClassConstructor<unknown> | EntitySchema;
-
+/**
+ * Registers all models in the model directory
+ */
 export default <Loader<Model[]>>function ({ container }) {
   const modelsPath = path.join(__dirname, '../models/*.model.{ts,js}');
   const models: (ClassConstructor<unknown> | EntitySchema)[] = [];
