@@ -7,6 +7,7 @@ import { AppContainer } from '@shared/types';
 import modelsLoader from './models.loader';
 import databaseLoader from './database.loader';
 import repositoriesLoader from './repositories.loader';
+import servicesLoader from './services.loader';
 
 type Options = {
   app: Express;
@@ -21,6 +22,9 @@ export default async ({
   const db = await databaseLoader({ container });
 
   repositoriesLoader({ container });
+
+  container.register({ manager: asValue(db.manager) });
+  servicesLoader({ container });
 
   // Add the registered services to the request scope
   app.use((req: Request, res: Response, next: NextFunction) => {
