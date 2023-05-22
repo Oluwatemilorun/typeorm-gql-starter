@@ -11,7 +11,7 @@ export function formatRegistrationName(path: string): string {
   const parsed = parse(path);
   const parsedDir = parse(parsed.dir);
 
-  const rawname = parsed.name;
+  let rawname = parsed.name;
   let namespace = parsedDir.name;
   if (namespace.startsWith('__')) {
     const parsedCoreDir = parse(parsedDir.dir);
@@ -32,6 +32,8 @@ export function formatRegistrationName(path: string): string {
   }
 
   const upperNamespace = namespace.charAt(0).toUpperCase() + namespace.slice(1, -1);
+
+  rawname = rawname.replace(`.${upperNamespace.toLowerCase()}`, '');
 
   const parts = rawname.split('-').map((n, index) => {
     if (index !== 0) {
