@@ -4,19 +4,14 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
-import createError from 'http-errors';
 import express, { Express } from 'express';
 import health from 'express-ping';
 import requestIp from 'request-ip';
-import { NOT_FOUND } from 'http-status-codes';
 
-import SetupV1Router from '@routes/v1';
 import { Config } from '@config';
-import { ErrorHandler } from '@shared/functions';
 import { Constants } from '@shared/constants';
-import { SetupGraphqlServer } from '@graphql/server';
 
-const CreateServer = async (): Promise<Express> => {
+export const CreateServer = async (): Promise<Express> => {
   // Init express
   const app = express();
 
@@ -45,21 +40,7 @@ const CreateServer = async (): Promise<Express> => {
     app.use(requestIp.mw({ attributeName: Constants.REQUEST_ATTRIBUTES.IP_ADDRESS }));
   }
 
-  // Add APIs
-  SetupV1Router(app);
-  await SetupGraphqlServer(app);
-
-  // catch 404 and forward to error handler
-  app.use((req, res, next) => {
-    next(createError(NOT_FOUND));
-  });
-
-  // handle errors
-  app.use(ErrorHandler);
-
   //  TODO: Add favicon.
 
   return app;
 };
-
-export default CreateServer;

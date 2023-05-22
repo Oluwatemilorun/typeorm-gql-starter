@@ -3,6 +3,7 @@ import { EntitySchema } from 'typeorm';
 
 export interface ApolloContext {
   remoteAddress: string;
+  scope: AppContainer;
 }
 
 export interface PaginationOptions {
@@ -27,7 +28,9 @@ export type AppContainer = AwilixContainer & {
   createScope: () => AppContainer;
 };
 
-export type Loader<T> = (opt: { container: AppContainer }) => T | Promise<T>;
+export type Loader<T, O = object> = (
+  opt: { container: AppContainer } & O,
+) => T | Promise<T>;
 
 export type ClassConstructor<T> = {
   new (...args: unknown[]): T;

@@ -3,10 +3,9 @@ import '@shared/types/modules';
 
 import { Config } from '@config';
 import { Constants } from '@shared/constants';
-import { GracefulShutdownServer } from '@shared/functions';
+import { CreateServer, GracefulShutdownServer } from '@shared/functions';
 import logger from '@shared/logger';
 import loaders from '@loaders';
-import CreateServer from '@server';
 
 process.on('unhandledRejection', function (reason, p) {
   logger.warn('Possibly Unhandled Rejection at: Promise ', p, ' reason: ', reason);
@@ -17,7 +16,7 @@ process.on('unhandledRejection', function (reason, p) {
     const app = await CreateServer();
 
     try {
-      const { db } = await loaders({ app });
+      const { db, container } = await loaders({ app });
       const port = Number(Config.PORT);
 
       const server = GracefulShutdownServer.create(
@@ -36,7 +35,7 @@ process.on('unhandledRejection', function (reason, p) {
 
       // Handle graceful shutdown of database and server
       const gracefulShutDown = (): void => {
-        Promise.all([db.destroy(), server.shutdown()])
+        Promise.all([db.destroy(), container.dispose(), server.shutdown()])
           .then(() => {
             logger.info('Gracefully stopping the server.');
             process.exit(0);

@@ -31,8 +31,8 @@
 			"@repositories/*": [
 				"src/repositories/*"
 			],
-			"@graphql/*": [
-				"src/graphql/*"
+			"@resolvers/*": [
+				"src/resolvers/*"
 			],
 			"@loaders/*": [
 				"src/loaders/*"
@@ -45,9 +45,6 @@
 			],
 			"@config": [
 				"src/config"
-			],
-			"@server": [
-				"src/server"
 			],
 			"@/*": [
 				"src/*"

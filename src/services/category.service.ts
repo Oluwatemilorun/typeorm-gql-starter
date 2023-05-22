@@ -19,6 +19,10 @@ export class CategoryService extends BaseService {
 
     this._repository = categoryRepository;
   }
+
+  justTest() {
+    console.log('dependency injection works');
+  }
 }
 
 export default CategoryService;

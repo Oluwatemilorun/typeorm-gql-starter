@@ -1,7 +1,9 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryColumn } from 'typeorm';
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { IsOptional, IsUrl, Length } from 'class-validator';
 import { BaseSchema } from '@shared/entity';
+
+import { Dish } from './dish.model';
 
 @Entity()
 @ObjectType()
@@ -23,6 +25,9 @@ export class Category extends BaseSchema {
   @Field({ nullable: true })
   @Column({ length: 1000, nullable: true })
   iconUrl?: string;
+
+  @ManyToMany(() => Dish, (dish) => dish.categories)
+  dishes: Dish[];
 }
 
 @InputType({ description: 'Add a new category' })

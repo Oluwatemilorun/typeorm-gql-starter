@@ -1,18 +1,25 @@
+import { asValue } from 'awilix';
 import { Express } from 'express';
+import { DataSource } from 'typeorm';
 import { ArgumentValidationError, buildSchema } from 'type-graphql';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 
-import { ApolloContext } from '@/shared/types';
-import { Constants } from '@/shared/constants';
-import { BadRequestError } from '@/shared/errors';
+import { ApolloContext, AppContainer, ContainerStore, Loader } from '@shared/types';
+import { Constants } from '@shared/constants';
+import { BadRequestError } from '@shared/errors';
+import { queryComplexityPlugin } from '@shared/functions';
 
-import { queryComplexityPlugin } from './plugins/queryComplexity';
-import Resolvers from './resolvers';
+type Opt = {
+  app: Express;
+  db: DataSource;
+};
 
-export const SetupGraphqlServer = async (app: Express): Promise<void> => {
+export default <Loader<void, Opt>>async function ({ container, app, db }) {
+  const resolvers = container.resolve(ContainerStore.RESOLVERS);
+
   const schema = await buildSchema({
-    resolvers: Resolvers,
+    resolvers,
     validate: {
       forbidUnknownValues: true,
     },
@@ -49,7 +56,11 @@ export const SetupGraphqlServer = async (app: Express): Promise<void> => {
     '/gq',
     expressMiddleware(server, {
       context: async ({ req }) => {
+        container.register({ manager: asValue(db.manager) });
         return {
+          // Inject the registered services into the apollo graphql server context
+          scope: container.createScope() as AppContainer,
+          // Inject the client remote address into the apollo graphql server context
           remoteAddress:
             (req as unknown as Record<string, string>)[
               Constants.REQUEST_ATTRIBUTES.IP_ADDRESS

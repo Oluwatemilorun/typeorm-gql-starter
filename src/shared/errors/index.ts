@@ -1,4 +1,4 @@
-import { GraphQLError, GraphQLErrorOptions } from 'graphql/index';
+import { GraphQLError, GraphQLErrorOptions } from 'graphql';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { RateLimiterRes } from 'rate-limiter-flexible';
 import { ArgumentValidationError } from 'type-graphql';

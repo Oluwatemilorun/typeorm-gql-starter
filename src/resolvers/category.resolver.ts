@@ -1,5 +1,16 @@
-import { Arg, Args, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql';
+import {
+  Arg,
+  Args,
+  Ctx,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql';
 import { Category, CategoryInput, DishesArg, PaginatedDishes } from '@models';
+import CategoryService from '@/services/category.service';
+import { ApolloContext } from '@shared/types';
 
 @Resolver(() => Category)
 export class CategoryResolver {
@@ -34,7 +45,12 @@ export class CategoryResolver {
   async dishes(
     @Root() category: Category,
     @Args() { limit, page }: DishesArg,
+    @Ctx() ctx: ApolloContext,
   ): Promise<PaginatedDishes> {
+    const service = ctx.scope.resolve<CategoryService>('categoryService');
+
+    service.justTest();
+
     return {
       count: 10,
       items: [],

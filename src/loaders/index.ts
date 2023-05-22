@@ -8,6 +8,8 @@ import modelsLoader from './models.loader';
 import databaseLoader from './database.loader';
 import repositoriesLoader from './repositories.loader';
 import servicesLoader from './services.loader';
+import resolversLoader from './resolvers.loader';
+import graphqlServerLoader from './graphql-server.loader';
 
 type Options = {
   app: Express;
@@ -25,6 +27,9 @@ export default async ({
 
   container.register({ manager: asValue(db.manager) });
   servicesLoader({ container });
+
+  resolversLoader({ container });
+  await graphqlServerLoader({ container, app, db });
 
   // Add the registered services to the request scope
   app.use((req: Request, res: Response, next: NextFunction) => {

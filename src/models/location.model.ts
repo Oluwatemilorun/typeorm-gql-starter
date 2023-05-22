@@ -35,6 +35,7 @@ export abstract class Location extends BaseSchema {
 @Entity()
 @ObjectType()
 export class RestaurantLocation extends Location {
+  @Field(() => Restaurant)
   @OneToOne(() => Restaurant, (restaurant) => restaurant.location)
   restaurant: Restaurant;
 }
