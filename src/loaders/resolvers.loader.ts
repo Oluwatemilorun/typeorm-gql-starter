@@ -1,8 +1,7 @@
-import { asFunction, asValue } from 'awilix';
+import { asValue } from 'awilix';
 import path from 'path';
 import glob from 'glob';
 import { ClassConstructor, ContainerStore, Loader } from '@shared/types';
-import { formatRegistrationName } from '@shared/functions';
 
 /**
  * Registers all resolvers in the resolvers directory
@@ -19,11 +18,6 @@ export default <Loader<ClassConstructor<unknown>[]>>function ({ container }) {
     if (loaded) {
       Object.entries(loaded).map(([, val]: [string, ClassConstructor<unknown>]) => {
         if (typeof val === 'function') {
-          const name = formatRegistrationName(fn);
-          container.register({
-            [name]: asFunction((cradle) => new val(cradle)),
-          });
-
           container.registerStore(ContainerStore.RESOLVERS, asValue(val));
         }
 
