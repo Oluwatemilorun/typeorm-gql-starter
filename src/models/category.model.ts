@@ -50,3 +50,22 @@ export class CategoryInput implements Partial<Category> {
   @IsUrl()
   iconUrl?: string;
 }
+
+@InputType({ description: 'Update a category' })
+export class UpdateCategoryInput implements Partial<Category> {
+  @Field({ nullable: true })
+  @Length(3, 50)
+  name?: string;
+
+  @Field({ nullable: true })
+  @Length(3, 150)
+  description?: string;
+
+  @Field({ nullable: true })
+  @IsUrl()
+  coverUrl?: string;
+
+  @Field({ nullable: true })
+  @IsUrl()
+  iconUrl?: string;
+}

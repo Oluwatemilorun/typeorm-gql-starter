@@ -6,6 +6,8 @@ const requestBodyAttributes = {
 const errorCodes = {
   /** The maximum query complexity has been exceeded, 429 */
   MAX_QUERY_COMPLEXITY_EXCEEDED: 'MAX_QUERY_COMPLEXITY_EXCEEDED',
+  /** The resource was not found */
+  NOT_FOUND: 'NOT_FOUND',
 } as const;
 
 export const Constants = {

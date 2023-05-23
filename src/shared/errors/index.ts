@@ -77,3 +77,15 @@ export class BadRequestError extends GraphQLError {
     super(err.message, opts);
   }
 }
+
+export class NotFoundError extends GraphQLError {
+  constructor(msg: string) {
+    const opts: GraphQLErrorOptions = {
+      extensions: {
+        code: Constants.ERROR_CODES.NOT_FOUND,
+      },
+    };
+
+    super(msg, opts);
+  }
+}
