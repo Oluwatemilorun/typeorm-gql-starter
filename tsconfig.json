@@ -34,14 +34,17 @@
 			"@resolvers/*": [
 				"src/resolvers/*"
 			],
+			"@services/*": [
+				"src/services/*"
+			],
 			"@loaders/*": [
 				"src/loaders/*"
 			],
 			"@loaders": [
 				"src/loaders",
 			],
-			"@models": [
-				"src/models"
+			"@models/*": [
+				"src/models/*"
 			],
 			"@config": [
 				"src/config"

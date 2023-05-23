@@ -5,7 +5,7 @@ export abstract class BaseService {
   protected _manager: EntityManager;
   protected _transactionManager: EntityManager | undefined;
 
-  protected get activeManager_(): EntityManager {
+  protected get _activeManager(): EntityManager {
     return this._transactionManager ?? this._manager;
   }
 
@@ -32,7 +32,7 @@ export abstract class BaseService {
     return cloned;
   }
 
-  protected shouldRetryTransaction_(
+  protected _shouldRetryTransaction(
     err: { code: string } | Record<string, unknown>,
   ): boolean {
     if (!(err as { code: string })?.code) {
@@ -51,7 +51,7 @@ export abstract class BaseService {
    * @param maybeErrorHandlerOrDontFail Potential error handler
    * @return the result of the transactional work
    */
-  protected async atomicPhase_<TResult, TError>(
+  protected async _atomicPhase<TResult, TError>(
     work: (transactionManager: EntityManager) => Promise<TResult | never>,
     isolationOrErrorHandler?:
       | IsolationLevel
@@ -117,7 +117,7 @@ export abstract class BaseService {
           );
           return result;
         } catch (error) {
-          if (this.shouldRetryTransaction_(error as Record<string, unknown>)) {
+          if (this._shouldRetryTransaction(error as Record<string, unknown>)) {
             return this._manager.transaction(
               isolation as IsolationLevel,
               async (m): Promise<never | TResult> => doWork(m),
