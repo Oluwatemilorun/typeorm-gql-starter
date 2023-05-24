@@ -18,8 +18,4 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'warn',
     '@typescript-eslint/no-inferrable-types': 'off',
   },
-  ignorePatterns: [
-    'migrations/*', // Ignore generated migrations.
-    'dist/**/*', // Ignore built files.
-  ],
 };

@@ -51,6 +51,15 @@ To install dependencies, using then yarn pkg manager
 $ yarn install
 ```
 
+### Migrations
+```sh
+# Generate migrations
+$ yarn db:generate-migrations <NAME-OF-MIGRATION> --env=development
+
+# Run migrations
+$ yarn db:run-migrations --env=development
+```
+
 ### Build and Run
 ```sh
 $ yarn start:dev

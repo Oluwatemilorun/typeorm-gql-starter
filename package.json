@@ -2,7 +2,8 @@
 	"name": "ts-gql-starter",
 	"version": "0.0.1",
 	"scripts": {
-		"db:migrate": "scripts/migration.sh",
+		"db:generate-migrations": "yarn build && scripts/generate-migration.sh",
+		"db:run-migrations": "yarn build && scripts/run-migration.sh",
 		"build": "rm -rf ./dist && tsc --build tsconfig.prod.json && tsc-alias",
 		"start": "node ./dist",
 		"start:dev": "nodemon --config nodemon.json",

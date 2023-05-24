@@ -2,3 +2,4 @@ build.js
 spec
 dist
 codegen/tmp
+src/db/migrations
