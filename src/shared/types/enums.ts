@@ -2,3 +2,11 @@ export enum ContainerStore {
   DB_ENTITIES = 'DB_ENTITIES',
   RESOLVERS = 'RESOLVERS',
 }
+
+export enum PostgresError {
+  DUPLICATE_ERROR = '23505',
+  FOREIGN_KEY_ERROR = '23503',
+  SERIALIZATION_FAILURE = '40001',
+  NULL_VIOLATION = '23502',
+  INVALID_UUID = '22P02',
+}

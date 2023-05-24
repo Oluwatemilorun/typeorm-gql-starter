@@ -8,6 +8,8 @@ const errorCodes = {
   MAX_QUERY_COMPLEXITY_EXCEEDED: 'MAX_QUERY_COMPLEXITY_EXCEEDED',
   /** The resource was not found */
   NOT_FOUND: 'NOT_FOUND',
+  /** The requested operation was not successful */
+  SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
 } as const;
 
 export const Constants = {

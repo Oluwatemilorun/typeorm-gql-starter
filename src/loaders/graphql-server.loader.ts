@@ -1,13 +1,18 @@
 import { asValue } from 'awilix';
 import { Express } from 'express';
 import { DataSource } from 'typeorm';
-import { ArgumentValidationError, buildSchema } from 'type-graphql';
+import { buildSchema } from 'type-graphql';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 
 import { ApolloContext, AppContainer, ContainerStore, Loader } from '@shared/types';
 import { Constants } from '@shared/constants';
-import { BadRequestError } from '@shared/errors';
+import {
+  BadRequestError,
+  DatabaseError,
+  isQueryFailedError,
+  isValidationError,
+} from '@shared/errors';
 import { queryComplexityPlugin } from '@shared/functions';
 
 type Opt = {
@@ -27,15 +32,17 @@ export default <Loader<void, Opt>>async function ({ container, app, db }) {
       async ({}, next): Promise<void> => {
         try {
           return await next();
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-          if (
-            err instanceof ArgumentValidationError ||
-            (err.message &&
-              (err.message as string).toLowerCase().includes('validation error'))
-          ) {
+        } catch (err: unknown) {
+          if (isValidationError(err)) {
             throw new BadRequestError(err);
           }
+
+          if (isQueryFailedError(err)) {
+            console.log({ ...err });
+            throw new DatabaseError(err);
+          }
+
+          // TODO: Catch and handle more errors
         }
       },
     ],
