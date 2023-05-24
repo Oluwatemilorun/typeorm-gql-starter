@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { Config } from '@config';
 import { ContainerStore, Loader } from '@/shared/types';
 
@@ -12,7 +13,7 @@ export default <Loader<DataSource>>async function ({ container }) {
     url: Config.DB_URL,
     migrationsRun: true,
     entities,
-    migrations: ['../migrations/*.ts'],
+    namingStrategy: new SnakeNamingStrategy(),
   });
 
   try {
