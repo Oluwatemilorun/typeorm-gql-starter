@@ -16,13 +16,25 @@ export class DatabaseError extends GraphQLError {
   protected static _formatException(err: any): [string, Record<string, unknown>] {
     switch (err.code) {
       case PostgresError.DUPLICATE_ERROR:
+        const dupliErrMatch = /Key \(([\w]+)\)=\(([\s\S]+)\) already exists\./g.exec(
+          err.detail,
+        );
+        const dupliKey = dupliErrMatch?.[1].replace(/\_/g, ' ');
+        const dupliVal = dupliErrMatch?.[2];
+
         return [
-          'Item already exist',
+          `${dupliKey} with value "${dupliVal}" already exist.`,
           {
             code: ApolloServerErrorCode.BAD_USER_INPUT,
             errors: [
               {
-                property: '',
+                property: dupliKey
+                  ?.split(' ')
+                  .map((w, i) =>
+                    i === 0 ? w : `${w.charAt(0).toUpperCase()}${w.slice(1)}`,
+                  )
+                  .join(''),
+                value: dupliVal,
               },
             ] as ValidationError[],
           },
